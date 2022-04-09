@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EscapeFromTheRumbling</title>
+</head>
+<body>
+  <div class="container">
+    <canvas id="can"></canvas>
+  </div>
+  <script>
+    const fieldCol = 7;
+    const fieldRow = 7;
+    const blockSize = 50;
+    const screenW = fieldCol * blockSize;
+    const screenH = fieldRow * blockSize;
+    const tetroSize = 7;
+    const can = document.getElementById('can');
+    const con = can.getContext('2d');
+
+    can.width = screenW;
+    can.height = screenH;
+    can.style.border = '4px solid #555';
+    can.style.backgroundColor = 'antiquewhite';
+
+    let playerPosition = 3;
+    let defaultSpeed = 500;
+    let escapeCount = 0;
+
+    const titan = new Image();
+    titan.src = 'colossal_titan.png';
+
+    const turtle = new Image();
+    turtle.src = 'turtle.png';
+
+    const tetroPaterns = [
+      [0, 1, 1, 1, 1, 1, 1],
+      [1, 0, 1, 1, 1, 1, 1],
+      [1, 1, 0, 1, 1, 1, 1],
+      [1, 1, 1, 0, 1, 1, 1],
+      [1, 1, 1, 1, 0, 1, 1],
+      [1, 1, 1, 1, 1, 0, 1],
+      [1, 1, 1, 1, 1, 1, 0],
+    ]
+
+    let randomNum = Math.floor(Math.random() * tetroPaterns.length);
+    let tetro = [];
+    tetro[0] = tetroPaterns[randomNum];
+
+    const tetroRow = 1;
+
+    // テトロミノの座標
+    let tetroX = 0;
+    let tetroY = 0;
+
+    // フィールド本体
+    let field = [];
+
+    function init() {
+      for (let y = 0; y < fieldRow; y++) {
+        field[y] = [];
+        for (let x = 0; x < fieldCol; x++) {
+          field[y][x] = 0;
+        }
+      }
+    }
+
+    // 全部表示する
+    function drawAll() {
+      con.clearRect(0, 0, screenW, screenH);
+      // フィールドを描画
+      for (let y = 0; y < fieldRow; y++) {
+        for (let x = 0; x < fieldCol; x++) {
+          if(field[y][x]) {
+            drawBlock(x, y);
+          }
+        }
+      }
+      // テトロミノを描画
+      for (let y = 0; y < 1; y++) {
+        for (let x = 0; x < tetroSize; x++) {
+          if(tetro[y][x]) {
+            drawBlock(tetroX + x, tetroY + y);
+            // プレイヤーの初期位置を描画
+            drawPlayer(playerPosition, 6);
+          }
+        }
+      }
+    }
+
+    // ブロックを下降する
+    function dropTetro() {
+      tetroY++;
+      // 巨人とプレイヤーのY座標が同じとき
+      if(tetroY == (fieldRow - 1)) {
+        // 巨人とプレイヤーが接触しているか判定
+        let safetyArea = tetroPaterns[randomNum].indexOf(0);
+        judgeContact(safetyArea, playerPosition);
+      } else if(tetroY > fieldRow) {
+        randomNum = Math.floor(Math.random() * tetroPaterns.length);
+        tetro[0] = tetroPaterns[randomNum];
+        tetroY = 0;
+        defaultSpeed -= 10;
+        escapeCount++;
+        console.log(escapeCount);
+      }
+      drawAll();
+      setTimeout(dropTetro, defaultSpeed);
+    }
+
+    setTimeout(dropTetro, defaultSpeed);
+
+    // 移動できるかチェック
+    function checkMove(mx, my) {
+      for (let y = 0; y < tetroSize; y++) {
+        for (let x = 0; x < tetroSize; x++) {
+          let nx = tetroX + mx + x;
+          let ny = tetroY + my + y;
+          if (tetro[y][x]) {
+            if(
+                ny < 0 ||
+                nx < 0 ||
+                ny >= fieldRow ||
+                nx >= fieldCol ||
+                field[ny][nx]
+              )
+            {
+                return false;
+            }
+          }
+        }
+      }
+      return true;
+    }
+
+    // プレイヤーと巨人の接触判定
+    function judgeContact(a, b) {
+      if(a != b) {
+        alert(`GAME OVER (T_T) YOUR POINT IS ...${escapeCount}`);
+        tetroY = 0;
+        escapeCount = 0;
+        defaultSpeed = 500;
+      }
+    }
+
+    // ブロックを一つ描画する
+    function drawBlock(x, y) {
+      let px = x * blockSize;
+      let py = y * blockSize;
+      con.drawImage(titan, px, py, blockSize, blockSize);
+    }
+
+    // プレイヤーを一つ描画する
+    function drawPlayer(x, y) {
+      let px = x * blockSize;
+      let py = y * blockSize;
+      con.drawImage(turtle, px, py, blockSize, blockSize);
+    }
+
+    // キーボードを押されたときの処理
+    document.onkeydown = function(e) {
+      switch(e.keyCode) {
+        case 37: // 左
+          playerPosition--;
+          break;
+        case 39: // 右
+          playerPosition++;
+          break;
+      }
+      drawAll();
+    }
+
+    init();
+    drawAll();
+
+  </script>
+</body>
+</html>
