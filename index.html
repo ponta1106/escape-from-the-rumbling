@@ -146,7 +146,7 @@
       }
     }
 
-    // 全部表示する
+    // フィールド、巨人、プレイヤーを表示する
     function drawAll() {
       con.clearRect(0, 0, screenW, screenH);
       // フィールドを描画
@@ -157,7 +157,7 @@
           }
         }
       }
-      // テトロミノを描画
+      // 巨人を描画
       for (let y = 0; y < 1; y++) {
         for (let x = 0; x < tetroSize; x++) {
           if(tetro[y][x]) {
@@ -188,7 +188,7 @@
       drawAll();
       currentPoint.textContent = `よけた数 : ${escapeCount}`;
       currentSpeed.textContent = `巨人のスピード : ${(510 - defaultSpeed)/10}`;
-      // setTimeout(dropTetro, defaultSpeed);
+      setTimeout(dropTetro, defaultSpeed);
     }
 
     setTimeout(dropTetro, defaultSpeed);
