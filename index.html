@@ -4,67 +4,82 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Quicksand:wght@600&display=swap" rel="stylesheet">
   <title>EscapeFromTheRumbling</title>
   <style>
     body {
       color: #555;
       background-color: rosybrown;
+      font-family: 'DotGothic16', sans-serif;
     }
     .container {
       width: 350px;
       margin: 30px auto;
       text-align: center;
+      border: 5px solid #555;
     }
-    h3 {
+    h2 {
       margin: 0;
-      width: 340px;
-      padding: 5px;
-      border-top: 5px solid #555;
-      border-right: 5px solid #555;
-      border-left: 5px solid #555;
-      background-color: #555;
+      padding: 10px;
       color: lightblue;
-      border-radius: 15px 15px 0 0;
+      background-color: #555;
     }
     #can {
-      width: 350px;
-      margin-bottom: -6px;
-      border: 5px solid #555;
+      /* 隙間ができるので埋めます */
+      margin-bottom: -5px;
       background-color: lightblue;
+      border-bottom: 5px solid #555;
     }
     #controller {
       width: 340px;
       padding: 5px;
       display: flex;
       background-color: #555;
-      border-right: 5px solid #555;
-      border-bottom: 5px solid #555;
-      border-left: 5px solid #555;
       justify-content: space-around;
-      border-radius: 0 0 15px 15px;
     }
     /* 左の方向キーを作成 */
     #left {
       width: 0px;
       border-top: 30px solid transparent;
+      border-left: 30px solid transparent;
       border-right: 30px solid lightblue;
       border-bottom: 30px solid transparent;
-      border-left: 30px solid transparent;
     }
     /* 右の方向キーを作成 */
     #right {
       width: 0px;
       border-top: 30px solid transparent;
+      border-left: 30px solid lightblue;
       border-right: 30px solid transparent;
       border-bottom: 30px solid transparent;
-      border-left: 30px solid lightblue;
     }
-  </style>
+    .resultArea {
+      width: 100%;
+      display: flex;
+    }
+    .result {
+      flex: 1;
+      margin: 0;
+      padding: 10px;
+      border: 5px solid #555;
+      background-color: lightblue;
+    }
+    </style>
 </head>
 <body>
   <div class="container">
-    <h3>Escape From The Rumbling</h3>
+    <!-- タイトル部分 -->
+    <h2>Escape From The Rumbling</h2>
+    <!-- キャンバス部分 -->
     <canvas id="can"></canvas>
+    <!-- スコア表示部分 -->
+    <div class="resultArea">
+      <p id="currentPoint" class="result"></p>
+      <p id="currentSpeed" class="result"></p>
+    </div>
+    <!-- 方向キー部分 -->
     <div id="controller">
       <div id="left"></div>
       <div id="right"></div>
@@ -81,6 +96,8 @@
     const con = can.getContext('2d');
     const leftButton = document.getElementById('left');
     const rightButton = document.getElementById('right');
+    const currentPoint = document.getElementById('currentPoint');
+    const currentSpeed = document.getElementById('currentSpeed');
 
     can.width = screenW;
     can.height = screenH;
@@ -88,6 +105,8 @@
     let playerPosition = 3;
     let defaultSpeed = 500;
     let escapeCount = 0;
+    currentPoint.textContent = `${escapeCount} 回よけた`;
+    currentSpeed.textContent = `${defaultSpeed} スピード`;
 
     const titan = new Image();
     titan.src = 'colossal_titan.png';
@@ -167,7 +186,9 @@
         console.log(escapeCount);
       }
       drawAll();
-      setTimeout(dropTetro, defaultSpeed);
+      currentPoint.textContent = `よけた数 : ${escapeCount}`;
+      currentSpeed.textContent = `巨人のスピード : ${(510 - defaultSpeed)/10}`;
+      // setTimeout(dropTetro, defaultSpeed);
     }
 
     setTimeout(dropTetro, defaultSpeed);
