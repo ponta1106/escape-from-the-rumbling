@@ -5,10 +5,70 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>EscapeFromTheRumbling</title>
+  <style>
+    body {
+      color: #555;
+      background-color: rosybrown;
+    }
+    .container {
+      width: 350px;
+      margin: 30px auto;
+      text-align: center;
+    }
+    h3 {
+      margin: 0;
+      width: 340px;
+      padding: 5px;
+      border-top: 5px solid #555;
+      border-right: 5px solid #555;
+      border-left: 5px solid #555;
+      background-color: #555;
+      color: lightblue;
+      border-radius: 15px 15px 0 0;
+    }
+    #can {
+      width: 350px;
+      margin-bottom: -6px;
+      border: 5px solid #555;
+      background-color: lightblue;
+    }
+    #controller {
+      width: 340px;
+      padding: 5px;
+      display: flex;
+      background-color: #555;
+      border-right: 5px solid #555;
+      border-bottom: 5px solid #555;
+      border-left: 5px solid #555;
+      justify-content: space-around;
+      border-radius: 0 0 15px 15px;
+    }
+    /* 左の方向キーを作成 */
+    #left {
+      width: 0px;
+      border-top: 30px solid transparent;
+      border-right: 30px solid lightblue;
+      border-bottom: 30px solid transparent;
+      border-left: 30px solid transparent;
+    }
+    /* 右の方向キーを作成 */
+    #right {
+      width: 0px;
+      border-top: 30px solid transparent;
+      border-right: 30px solid transparent;
+      border-bottom: 30px solid transparent;
+      border-left: 30px solid lightblue;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
+    <h3>Escape From The Rumbling</h3>
     <canvas id="can"></canvas>
+    <div id="controller">
+      <div id="left"></div>
+      <div id="right"></div>
+    </div>
   </div>
   <script>
     const fieldCol = 7;
@@ -19,11 +79,11 @@
     const tetroSize = 7;
     const can = document.getElementById('can');
     const con = can.getContext('2d');
+    const leftButton = document.getElementById('left');
+    const rightButton = document.getElementById('right');
 
     can.width = screenW;
     can.height = screenH;
-    can.style.border = '4px solid #555';
-    can.style.backgroundColor = 'antiquewhite';
 
     let playerPosition = 3;
     let defaultSpeed = 500;
@@ -159,19 +219,38 @@
       con.drawImage(turtle, px, py, blockSize, blockSize);
     }
 
+    //左キーを押したとき
+    left.addEventListener('click', ()=> {
+      if(playerPosition > 0) {
+        playerPosition--;
+      }
+      drawAll();
+    })
+
+    //右キーを押したとき
+    right.addEventListener('click', ()=> {
+      if(playerPosition < 6) {
+        playerPosition++;
+      }
+      drawAll();
+    })
+
     // キーボードを押されたときの処理
     document.onkeydown = function(e) {
       switch(e.keyCode) {
         case 37: // 左
+        if(playerPosition > 0) {
           playerPosition--;
-          break;
+        }
+        break;
         case 39: // 右
+        if(playerPosition < 6) {
           playerPosition++;
-          break;
+        }
+        break;
       }
       drawAll();
     }
-
     init();
     drawAll();
 
