@@ -114,6 +114,9 @@
     const turtle = new Image();
     turtle.src = 'turtle.png';
 
+    const anya = new Image();
+    anya.src = 'anya.png';
+
     const tetroPaterns = [
       [0, 1, 1, 1, 1, 1, 1],
       [1, 0, 1, 1, 1, 1, 1],
@@ -237,7 +240,7 @@
     function drawPlayer(x, y) {
       let px = x * blockSize;
       let py = y * blockSize;
-      con.drawImage(turtle, px, py, blockSize, blockSize);
+      con.drawImage(anya, px, py, blockSize, blockSize);
     }
 
     //左キーを押したとき
