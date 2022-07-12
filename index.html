@@ -20,7 +20,8 @@
       text-align: center;
       border: 5px solid #555;
     }
-    h2 {
+    #title,
+    #subTitle {
       margin: 0;
       padding: 10px;
       color: lightblue;
@@ -42,20 +43,21 @@
     /* 左の方向キーを作成 */
     #left {
       width: 0px;
-      border-top: 30px solid transparent;
-      border-left: 30px solid transparent;
-      border-right: 30px solid lightblue;
-      border-bottom: 30px solid transparent;
+      border-top: 20px solid transparent;
+      border-left: 20px solid transparent;
+      border-right: 20px solid lightblue;
+      border-bottom: 20px solid transparent;
     }
     /* 右の方向キーを作成 */
     #right {
       width: 0px;
-      border-top: 30px solid transparent;
-      border-left: 30px solid lightblue;
-      border-right: 30px solid transparent;
-      border-bottom: 30px solid transparent;
+      border-top: 20px solid transparent;
+      border-left: 20px solid lightblue;
+      border-right: 20px solid transparent;
+      border-bottom: 20px solid transparent;
     }
     .resultArea {
+      font-size: 13px;
       width: 100%;
       display: flex;
     }
@@ -71,7 +73,8 @@
 <body>
   <div class="container">
     <!-- タイトル部分 -->
-    <h2>Escape From The Rumbling</h2>
+    <h2 id="title">巨人をよけて！</h2>
+    <p id="subTitle">Escape From The Rumbling</p>
     <!-- キャンバス部分 -->
     <canvas id="can"></canvas>
     <!-- スコア表示部分 -->
@@ -105,14 +108,11 @@
     let playerPosition = 3;
     let defaultSpeed = 500;
     let escapeCount = 0;
-    currentPoint.textContent = `${escapeCount} 回よけた`;
-    currentSpeed.textContent = `${defaultSpeed} スピード`;
+    currentPoint.textContent = `よけた数 : ${escapeCount}`;
+    currentSpeed.textContent = `巨人のスピード : ${(510 - defaultSpeed)/10}`;
 
     const titan = new Image();
     titan.src = 'colossal_titan.png';
-
-    const turtle = new Image();
-    turtle.src = 'turtle.png';
 
     const anya = new Image();
     anya.src = 'anya.png';
